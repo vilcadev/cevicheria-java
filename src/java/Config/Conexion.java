@@ -5,7 +5,9 @@
 package Config;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -26,5 +28,39 @@ public class Conexion {
             
         }
         return con;
+    }
+    
+    
+     public void consultaDePrueba() {
+        Connection con = Conexion();
+
+        if (con != null) {
+            System.out.println("Conexión exitosa a la base de datos.");
+            try {
+                Statement stmt = con.createStatement();
+                String query = "SELECT * FROM categoria"; // Consulta de prueba
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    int id = rs.getInt("Id");
+                    String nombre = rs.getString("Nombre");
+                    System.out.println("Id: " + id + ", Nombre: " + nombre);
+                }
+
+                rs.close();
+                stmt.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Error en la conexión a la base de datos.");
+        }
+    }
+     
+     
+     public static void main(String[] args) {
+        Conexion conexion = new Conexion();
+        conexion.consultaDePrueba();
     }
 }
